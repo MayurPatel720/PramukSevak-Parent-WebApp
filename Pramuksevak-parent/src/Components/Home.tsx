@@ -9,6 +9,8 @@ import {
 	ChevronDown,
 } from "lucide-react";
 import gsap from "gsap";
+import { useQuery } from "@apollo/client/react";
+import { DEMO } from "../Graphql/user.graphql";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Home = ({ onLogoutSuccess }: any) => {
@@ -78,6 +80,11 @@ const Home = ({ onLogoutSuccess }: any) => {
 		}
 		return days;
 	};
+
+	const { data, loading, error } = useQuery(DEMO);
+	if (loading) console.log("Loading...");
+	if (error) console.log("Error : ", error);
+	if (data) console.log("Data : ", data);
 
 	const monthNames = [
 		"January",

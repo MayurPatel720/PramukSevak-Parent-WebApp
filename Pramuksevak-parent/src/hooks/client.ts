@@ -1,14 +1,14 @@
 import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 
-// HTTP link to your GraphQL API
 const httpLink = createHttpLink({
-	uri: "http://your-avashykam-api.com/graphql", // Replace with your actual GraphQL endpoint
+	uri: "https://avashyakam.sngmyhome.com/avdev/graphql",
 });
 
-// Add authorization header with token from localStorage
 const authLink = setContext((_, { headers }) => {
-	const token = localStorage.getItem("token");
+	const token =
+		"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOiI2ODM4ODc1OGQ5MjM4ZjdkMTBkYzYwYjYiLCJ0b2tlblZlcnNpb24iOiI0MTdiMjYyNS01NDA0LTQ5ZmUtODZkMC01NmQzZWVkNDZhNzMiLCJpYXQiOjE3NjE1NTk4MDcsImV4cCI6MTc2MTU2MzQwN30.NFKkyFlJ-cYrzAZzeiuUiJOV3hZxfnfovPbkkQF7qRM";
+	// const token = localStorage.getItem("accessToken");
 	return {
 		headers: {
 			...headers,
