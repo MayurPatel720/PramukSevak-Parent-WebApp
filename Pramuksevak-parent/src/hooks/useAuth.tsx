@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface User {
 	id: number;
@@ -18,7 +19,8 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-const useAuth = () => {
+// eslint-disable-next-line react-refresh/only-export-components
+export const useAuth = () => {
 	const context = useContext(AuthContext);
 	if (!context) {
 		throw new Error("useAuth must be used within AuthProvider");
@@ -30,7 +32,8 @@ interface AuthProviderProps {
 	children: ReactNode;
 }
 
-const AuthProvider = ({ children }: AuthProviderProps) => {
+export const AuthProvider = ({ children }: AuthProviderProps) => {
+	const navigate = useNavigate(); // ✅ Add this line
 	const [currentUser, setCurrentUser] = useState<User | null>(null);
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -55,6 +58,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 	const logout = (onSuccess?: () => void) => {
 		setCurrentUser(null);
 		setIsLoggedIn(false);
+		navigate("/login"); // ✅ Now works properly
 		if (onSuccess) onSuccess();
 	};
 
@@ -70,6 +74,3 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 		</AuthContext.Provider>
 	);
 };
-
-// eslint-disable-next-line react-refresh/only-export-components
-export { useAuth, AuthProvider };

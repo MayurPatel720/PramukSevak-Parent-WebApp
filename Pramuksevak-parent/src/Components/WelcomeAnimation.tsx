@@ -31,7 +31,6 @@ const WelcomeAnimation = ({ onComplete }: { onComplete: () => void }) => {
 			});
 		});
 
-		// Main animation sequence - shortened to 2 seconds
 		tl.to(circleRef.current, {
 			scale: 1,
 			opacity: 0.3,
