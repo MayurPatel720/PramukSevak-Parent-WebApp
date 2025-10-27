@@ -6,20 +6,15 @@ import { useQuery } from "@apollo/client/react";
 import { DEMO } from "../Graphql/user.graphql";
 import AttendanceSummary from "../Pages/attendance/AttendanceSummary";
 import TransactionsOverview from "../Pages/transactions/Overview";
-import DigitalWellBeingOverview from "../Pages/digitalWellbeing/Overview"
+import DigitalWellBeingOverview from "../Pages/digitalWellbeing/Overview";
+import NoticeBoardOverview from "../Pages/Notice/Overview"
 import Header from "./Header";
 import Footer from "./Footer";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Home = ({ onLogoutSuccess }: any) => {
-	const navigate = useNavigate()
+  const navigate = useNavigate();
   const homeRef = useRef(null);
-
-  const notices = [
-    { id: 1, title: "Community Meeting", date: "2025-10-30", type: "event" },
-    { id: 2, title: "Payment Due Reminder", date: "2025-11-05", type: "alert" },
-    { id: 3, title: "Festival Celebration", date: "2025-11-10", type: "event" },
-  ];
 
   const demoTransactions = [
     {
@@ -67,8 +62,16 @@ const Home = ({ onLogoutSuccess }: any) => {
         totalScreenTime: 300,
         unlockCount: 85,
         apps: [
-          { appName: "Instagram", packageName: "com.instagram", usageMinutes: 120 },
-          { appName: "WhatsApp", packageName: "com.whatsapp", usageMinutes: 80 },
+          {
+            appName: "Instagram",
+            packageName: "com.instagram",
+            usageMinutes: 120,
+          },
+          {
+            appName: "WhatsApp",
+            packageName: "com.whatsapp",
+            usageMinutes: 80,
+          },
           { appName: "YouTube", packageName: "com.youtube", usageMinutes: 60 },
           { appName: "Chrome", packageName: "com.chrome", usageMinutes: 40 },
         ],
@@ -78,14 +81,55 @@ const Home = ({ onLogoutSuccess }: any) => {
         totalScreenTime: 345,
         unlockCount: 92,
         apps: [
-          { appName: "Instagram", packageName: "com.instagram", usageMinutes: 140 },
-          { appName: "WhatsApp", packageName: "com.whatsapp", usageMinutes: 95 },
+          {
+            appName: "Instagram",
+            packageName: "com.instagram",
+            usageMinutes: 140,
+          },
+          {
+            appName: "WhatsApp",
+            packageName: "com.whatsapp",
+            usageMinutes: 95,
+          },
           { appName: "YouTube", packageName: "com.youtube", usageMinutes: 70 },
           { appName: "Chrome", packageName: "com.chrome", usageMinutes: 40 },
         ],
       },
     ],
-  };
+  };	
+
+  const demoNotices = [
+    {
+      _id: "1",
+      title: "Important: Campus Closure Notice",
+      description:
+        "The campus will remain closed on October 30th due to maintenance work. All classes are postponed.",
+      media: ["image1.jpg", "document.pdf"],
+      createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+      priority: "high",
+      category: "Academic",
+    },
+    {
+      _id: "2",
+      title: "Exam Schedule Released",
+      description:
+        "Mid-term examination schedule for all departments has been published. Check the notice board for details.",
+      media: [],
+      createdAt: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
+      priority: "medium",
+      category: "Examination",
+    },
+    {
+      _id: "3",
+      title: "Library Hours Extended",
+      description:
+        "Library will now remain open until 10 PM on weekdays. New reading room facilities available.",
+      media: ["timing.jpg"],
+      createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+      priority: "low",
+      category: "Facility",
+    },
+  ];
 
   const { data, loading, error } = useQuery(DEMO);
   if (loading) console.log("Loading...");
@@ -121,51 +165,27 @@ const Home = ({ onLogoutSuccess }: any) => {
 
           {/* Noticeboard */}
           <div className="bg-white rounded-2xl shadow-lg p-5">
-            <div className="flex items-center gap-2 mb-4">
-              <Bell className="w-6 h-6 text-orange-600" />
-              <h2 className="text-lg font-bold text-gray-800">Noticeboard</h2>
-            </div>
-            <div className="space-y-3">
-              {notices.map((notice) => (
-                <div
-                  key={notice.id}
-                  className="p-3 bg-linear-to-br from-orange-50 to-red-50 rounded-xl border-l-4 border-orange-500"
-                >
-                  <h3 className="font-semibold text-gray-800 text-sm">
-                    {notice.title}
-                  </h3>
-                  <p className="text-xs text-gray-600 mt-1">{notice.date}</p>
-                  <span
-                    className={`text-xs px-2 py-1 rounded-full mt-2 inline-block ${
-                      notice.type === "event"
-                        ? "bg-blue-100 text-blue-700"
-                        : "bg-red-100 text-red-700"
-                    }`}
-                  >
-                    {notice.type}
-                  </span>
-                </div>
-              ))}
-            </div>
+            <NoticeBoardOverview
+		  	notices={demoNotices}
+			onSeeMore={() => navigate('/notices')}
+		  />
           </div>
 
           {/* Transactions */}
           <div className="bg-white rounded-2xl shadow-lg p-5">
             <TransactionsOverview
               transactions={demoTransactions}
-		    onSeeMore={() => navigate('/transactions')}
+              onSeeMore={() => navigate("/transactions")}
             />
           </div>
 
-		{/* Digital Well Being */}
-		<div className="bg-white rounded-2xl shadow-lg p-5">
+          {/* Digital Well Being */}
+          <div className="bg-white rounded-2xl shadow-lg p-5">
             <DigitalWellBeingOverview
-		  	data={demoDigitalWellBeingData}
-			onSeeMore={() => navigate('/digital-wellbeing')}
-		  />
+              data={demoDigitalWellBeingData}
+              onSeeMore={() => navigate("/digital-wellbeing")}
+            />
           </div>
-
-          
         </div>
       </main>
 
