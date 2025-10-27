@@ -4,7 +4,8 @@ import Home from "./Components/Home";
 import Login from "./Components/Login";
 import WelcomeAnimation from "./Components/WelcomeAnimation";
 import AttendanceCalendar from "./Pages/attendance/AttendanceCalendar";
-import Transactions from "./Pages/transactions/transactions";
+import Transactions from "./Pages/transactions/Transactions";
+import DigitalWellbeing from "./Pages/digitalWellbeing/DigitalWellBeing";
 
 const App = () => {
   const [appState, setAppState] = useState<"login" | "welcome" | "home">(
@@ -361,6 +362,8 @@ const App = () => {
       />
 
       <Route path="/transactions" element={<Transactions />} />
+
+      <Route path="/digital-wellbeing" element={<DigitalWellbeing />} />
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

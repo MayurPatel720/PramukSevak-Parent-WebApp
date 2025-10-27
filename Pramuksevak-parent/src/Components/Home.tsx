@@ -6,6 +6,7 @@ import { useQuery } from "@apollo/client/react";
 import { DEMO } from "../Graphql/user.graphql";
 import AttendanceSummary from "../Pages/attendance/AttendanceSummary";
 import TransactionsOverview from "../Pages/transactions/Overview";
+import DigitalWellBeingOverview from "../Pages/digitalWellbeing/Overview"
 import Header from "./Header";
 import Footer from "./Footer";
 
@@ -57,6 +58,34 @@ const Home = ({ onLogoutSuccess }: any) => {
       transaction_type: "ORDER",
     },
   ];
+
+  const demoDigitalWellBeingData = {
+    userId: "user123",
+    days: [
+      {
+        date: "2025-10-26",
+        totalScreenTime: 300,
+        unlockCount: 85,
+        apps: [
+          { appName: "Instagram", packageName: "com.instagram", usageMinutes: 120 },
+          { appName: "WhatsApp", packageName: "com.whatsapp", usageMinutes: 80 },
+          { appName: "YouTube", packageName: "com.youtube", usageMinutes: 60 },
+          { appName: "Chrome", packageName: "com.chrome", usageMinutes: 40 },
+        ],
+      },
+      {
+        date: "2025-10-27",
+        totalScreenTime: 345,
+        unlockCount: 92,
+        apps: [
+          { appName: "Instagram", packageName: "com.instagram", usageMinutes: 140 },
+          { appName: "WhatsApp", packageName: "com.whatsapp", usageMinutes: 95 },
+          { appName: "YouTube", packageName: "com.youtube", usageMinutes: 70 },
+          { appName: "Chrome", packageName: "com.chrome", usageMinutes: 40 },
+        ],
+      },
+    ],
+  };
 
   const { data, loading, error } = useQuery(DEMO);
   if (loading) console.log("Loading...");
@@ -128,42 +157,15 @@ const Home = ({ onLogoutSuccess }: any) => {
             />
           </div>
 
-          {/* Digital wellbeing */}
-          <div className="bg-white rounded-2xl shadow-lg p-5">
-            <div className="flex items-center gap-2 mb-4">
-              <Heart className="w-6 h-6 text-pink-600" />
-              <h2 className="text-lg font-bold text-gray-800">
-                Digital Wellbeing
-              </h2>
-            </div>
-            <div className="space-y-4">
-              <div>
-                <div className="flex justify-between text-sm mb-2">
-                  <span className="text-gray-600">App Usage Today</span>
-                  <span className="font-semibold text-gray-800">2h 15m</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-3">
-                  <div
-                    className="bg-linear-to-br from-pink-500 to-purple-500 h-3 rounded-full"
-                    style={{ width: "65%" }}
-                  ></div>
-                </div>
-              </div>
-
-              <div>
-                <div className="flex justify-between text-sm mb-2">
-                  <span className="text-gray-600">Weekly Goal</span>
-                  <span className="font-semibold text-gray-800">12h / 15h</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-3">
-                  <div
-                    className="bg-linear-to-br from-blue-500 to-cyan-500 h-3 rounded-full"
-                    style={{ width: "80%" }}
-                  ></div>
-                </div>
-              </div>
-            </div>
+		{/* Digital Well Being */}
+		<div className="bg-white rounded-2xl shadow-lg p-5">
+            <DigitalWellBeingOverview
+		  	data={demoDigitalWellBeingData}
+			onSeeMore={() => navigate('/digital-wellbeing')}
+		  />
           </div>
+
+          
         </div>
       </main>
 
