@@ -40,7 +40,10 @@ const App = () => {
 			/>
 
 			<Route path="/attendance" element={<AttendanceCalendar />} />
+			<Route path="/digital-wellbeing" element={<DigitalWellbeing />} />
+			<Route path="/transactions" element={<Transactions />} />
 
+			<Route path="/notices" element={<Notices />} />
 			<Route path="*" element={<Navigate to="/" replace />} />
 		</Routes>
 	);

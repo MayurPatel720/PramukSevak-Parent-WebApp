@@ -15,7 +15,7 @@ const Header = () => {
 						alt="Logo"
 						className="w-8 h-8 rounded-full border border-white/30"
 					/>
-					<h1 className="text-xl font-semibold tracking-wide">Pramuk Sevak</h1>
+					<h1 className="text-xl font-semibold tracking-wide">Pramukh Sevak</h1>
 				</div>
 			</header>
 		</>
