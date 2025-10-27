@@ -6,7 +6,7 @@ import {
   TrendingDown,
   Clock,
   Unlock,
-  Eye,
+  Eye
 } from "lucide-react";
 
 interface AppUsage {
@@ -132,15 +132,12 @@ const DigitalWellbeingOverview: React.FC<DigitalWellbeingOverviewProps> = ({
           Digital Wellbeing
         </h2>
         <div className="flex items-center gap-2">
-          <button
-            onClick={onSeeMore}
-            className="see-more-btn flex item-center gap-2 w-fit px-4 bg-linear-to-r from-purple-600 to-blue-600 text-white rounded-xl py-1 text-sm font-medium shadow-lg hover:shadow-xl hover:cursor-pointer hover:from-purple-700 hover:to-blue-700 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
-          >
-            <Eye />
-          </button>
           <span className="text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
             Today
           </span>
+          <button onClick={onSeeMore} className="see-more-btn hover:cursor-pointer p-2 border-transparent rounded-full bg-gradient-to-br from-purple-500 to-blue-600 text-white font-bold">
+            <Eye className="w-5 h-5" />
+          </button>
         </div>
       </div>
 

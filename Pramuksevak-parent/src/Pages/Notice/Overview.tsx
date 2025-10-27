@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useMemo } from "react";
 import gsap from "gsap";
 import { Bell, Calendar, Clock, ChevronRight, AlertCircle } from "lucide-react";
 
@@ -6,7 +6,7 @@ interface Notice {
   _id: string;
   title: string;
   description: string;
-  media: string[];
+  media?: string[];
   createdAt: string;
   priority: "high" | "medium" | "low";
   category: string;
@@ -90,6 +90,8 @@ const NoticeBoardOverview: React.FC<NoticeBoardOverviewProps> = ({
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
+    if (isNaN(date.getTime())) return "Unknown";
+
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
@@ -102,7 +104,8 @@ const NoticeBoardOverview: React.FC<NoticeBoardOverviewProps> = ({
   };
 
   // Show only latest 3 notices
-  const recentNotices = notices.slice(0, 3);
+  const recentNotices = useMemo(() => notices.slice(0, 3), [notices]);
+
   const highPriorityCount = notices.filter((n) => n.priority === "high").length;
   const unreadCount = notices.length;
 
@@ -116,32 +119,27 @@ const NoticeBoardOverview: React.FC<NoticeBoardOverviewProps> = ({
         </h2>
 
         <div className="flex items-center gap-2">
-          <button
-            onClick={onSeeMore}
-            className="see-more-btn w-full bg-linear-to-r from-indigo-600 to-purple-600 text-white rounded-3xl py-2 px-2 text-sm font-medium shadow-lg hover:shadow-xl hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2"
-          >
-            <p> All</p>
-            <ChevronRight className="w-4 h-4" />
-          </button>
-
           {highPriorityCount > 0 && (
             <span className="flex items-center gap-1 bg-red-100 text-red-700 text-xs font-semibold px-2 py-1 rounded-full">
               <AlertCircle className="w-3 h-3" />
               {highPriorityCount} urgent
             </span>
           )}
+          <button onClick={onSeeMore} className="see-more-btn hover:cursor-pointer">
+            <ChevronRight className="w-4 h-4" />
+          </button>
         </div>
       </div>
 
       {/* Quick Stats */}
       <div className="grid grid-cols-2 gap-3 mb-4">
-        <div className="notice-stat bg-gradient-to-br from-indigo-50 to-indigo-100 p-3 rounded-xl border border-indigo-200">
+        <div className="notice-stat bg-linear-to-br from-indigo-50 to-indigo-100 p-3 rounded-xl border border-indigo-200">
           <p className="text-xs text-indigo-700 font-medium mb-1">
             Total Notices
           </p>
           <p className="text-xl font-bold text-indigo-800">{unreadCount}</p>
         </div>
-        <div className="notice-stat bg-gradient-to-br from-purple-50 to-purple-100 p-3 rounded-xl border border-purple-200">
+        <div className="notice-stat bg-linear-to-br from-purple-50 to-purple-100 p-3 rounded-xl border border-purple-200">
           <p className="text-xs text-purple-700 font-medium mb-1">This Week</p>
           <p className="text-xl font-bold text-purple-800">
             {
@@ -156,7 +154,7 @@ const NoticeBoardOverview: React.FC<NoticeBoardOverviewProps> = ({
 
       {/* Recent Notices */}
       <div className="space-y-3 mb-4">
-        {recentNotices.map((notice, index) => (
+        {recentNotices.map((notice) => (
           <div
             key={notice._id}
             className="notice-card bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer group"
@@ -164,43 +162,41 @@ const NoticeBoardOverview: React.FC<NoticeBoardOverviewProps> = ({
             <div className="p-4">
               <div className="flex items-start gap-3">
                 <div
-                  className={`${getPriorityBadgeColor(
-                    notice.priority
-                  )} w-1 h-full absolute left-0 top-0 bottom-0`}
-                />
-                <div className="flex-1 pl-2">
-                  <div className="flex items-start justify-between gap-2 mb-2">
-                    <h3 className="text-sm font-semibold text-gray-900 line-clamp-1 group-hover:text-indigo-600 transition-colors">
-                      {notice.title}
-                    </h3>
-                    <span
-                      className={`text-xs px-2 py-0.5 rounded-full border flex-shrink-0 ${getPriorityColor(
-                        notice.priority
-                      )}`}
-                    >
-                      {notice.priority}
-                    </span>
-                  </div>
-                  <p className="text-xs text-gray-600 line-clamp-2 mb-2">
-                    {notice.description}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3 text-xs text-gray-500">
-                      <span className="flex items-center gap-1">
-                        <Calendar className="w-3 h-3" />
-                        {formatDate(notice.createdAt)}
+                  key={notice._id}
+                  className="notice-card relative bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer group"
+                >
+                  <div className="flex-1 pl-2">
+                    <div className="flex items-start justify-between gap-2 mb-2">
+                      <h3 className="text-sm font-semibold text-gray-900 line-clamp-1 group-hover:text-indigo-600 transition-colors">
+                        {notice.title}
+                      </h3>
+                      <span
+                        className={`text-xs px-2 py-0.5 rounded-full border shrink-0 ${getPriorityColor(
+                          notice.priority
+                        )}`}
+                      >
+                        {notice.priority}
                       </span>
-                      {notice.category && (
-                        <span className="bg-gray-100 px-2 py-0.5 rounded">
-                          {notice.category}
-                        </span>
-                      )}
                     </div>
-                    {notice.media && notice.media.length > 0 && (
-                      <span className="text-xs text-indigo-600 font-medium">
-                        📎 {notice.media.length}
-                      </span>
-                    )}
+                    <p className="text-xs text-gray-600 line-clamp-2 mb-2">
+                      {notice.description}
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3 text-xs text-gray-500">
+                        <span className="flex items-center gap-1">
+                          <Calendar className="w-3 h-3" />
+                          {formatDate(notice.createdAt)}
+                        </span>
+                        {notice.category && (
+                          <span className="bg-gray-100 px-2 py-0.5 rounded">
+                            {notice.category}
+                          </span>
+                        )}
+                      </div>
+                      {notice.media?.length ? (
+                        <span>📎 {notice.media.length}</span>
+                      ) : null}
+                    </div>
                   </div>
                 </div>
               </div>
