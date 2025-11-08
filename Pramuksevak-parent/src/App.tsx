@@ -10,7 +10,7 @@ import Notices from "./Pages/Notice/Notices";
 
 const App = () => {
 	const [appState, setAppState] = useState<"login" | "welcome" | "home">(
-		"login"
+		localStorage.getItem("accessToken") ? "home" : "login"
 	);
 
 	useEffect(() => {

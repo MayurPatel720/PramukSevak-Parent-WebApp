@@ -4,339 +4,41 @@ import dayjs from "dayjs";
 import { Calendar, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../../Components/Footer";
+import { useAuth } from "../../hooks/useAuth";
+import { useQuery } from "@apollo/client/react";
+import { GET_ATTENDANCE } from "../../Graphql/user.graphql";
 
 const AttendanceCalendar: React.FC = () => {
 	const navigate = useNavigate();
 
-	// ✅ Real API data (mocked here for example)
-	const data = {
-		data: {
-			viewAttendaceOfUserByIdMonthWise: {
-				code: 201,
-				message: "Data created successfully!",
-				success: true,
-				data: [
-					{
-						_id: "68ff5fed8ec6925908cc369d",
-						createdAt: "2025-10-27T12:05:01.596Z",
-						month: 7,
-						roll: 901,
-						updatedAt: "2025-10-27T12:05:12.022Z",
-						year: 2025,
-						user_data_monthwise: {
-							jabha_lengha_absent: null,
-							samuh_puja_absent: null,
-							daily_report: [
-								{
-									date: "2025-07-01T05:30:00.000Z",
-									dinner_attendance: "Present",
-									evening_sabha_attendance: "Present",
-									lunch_attendance: "Absent",
-									mobile: "Default",
-									morning_sabha_attendance: "Present",
-									reading_attendance: "Absent",
-								},
-								{
-									date: "2025-07-02T05:30:00.000Z",
-									dinner_attendance: "Present",
-									evening_sabha_attendance: "Present",
-									lunch_attendance: "Present",
-									mobile: "Default",
-									morning_sabha_attendance: "Present",
-									reading_attendance: "Absent",
-								},
-								{
-									date: "2025-07-03T05:30:00.000Z",
-									dinner_attendance: "Present",
-									evening_sabha_attendance: "Present",
-									lunch_attendance: "Present",
-									mobile: "Default",
-									morning_sabha_attendance: "Present",
-									reading_attendance: "Absent",
-								},
-								{
-									date: "2025-07-04T05:30:00.000Z",
-									dinner_attendance: "Absent",
-									evening_sabha_attendance: "Present",
-									lunch_attendance: "Present",
-									mobile: "Default",
-									morning_sabha_attendance: "Present",
-									reading_attendance: "Absent",
-								},
-								{
-									date: "2025-07-05T05:30:00.000Z",
-									dinner_attendance: "Present",
-									evening_sabha_attendance: "Present",
-									lunch_attendance: "Absent",
-									mobile: "Default",
-									morning_sabha_attendance: "Present",
-									reading_attendance: "Present",
-								},
-								{
-									date: "2025-07-06T05:30:00.000Z",
-									dinner_attendance: "Absent",
-									evening_sabha_attendance: "Present",
-									lunch_attendance: "Absent",
-									mobile: "Default",
-									morning_sabha_attendance: "Present",
-									reading_attendance: "Present",
-								},
-								{
-									date: "2025-07-07T05:30:00.000Z",
-									dinner_attendance: "Present",
-									evening_sabha_attendance: "Present",
-									lunch_attendance: "Present",
-									mobile: "Default",
-									morning_sabha_attendance: "Present",
-									reading_attendance: "Present",
-								},
-								{
-									date: "2025-07-08T05:30:00.000Z",
-									dinner_attendance: "Present",
-									evening_sabha_attendance: "Present",
-									lunch_attendance: "Present",
-									mobile: "Default",
-									morning_sabha_attendance: "Present",
-									reading_attendance: "Absent",
-								},
-								{
-									date: "2025-07-09T05:30:00.000Z",
-									dinner_attendance: "Present",
-									evening_sabha_attendance: "Present",
-									lunch_attendance: "Present",
-									mobile: "Default",
-									morning_sabha_attendance: "Present",
-									reading_attendance: "Absent",
-								},
-								{
-									date: "2025-07-10T05:30:00.000Z",
-									dinner_attendance: "Absent",
-									evening_sabha_attendance: "Present",
-									lunch_attendance: "Absent",
-									mobile: "Default",
-									morning_sabha_attendance: "Present",
-									reading_attendance: "Absent",
-								},
-								{
-									date: "2025-07-11T05:30:00.000Z",
-									dinner_attendance: "Absent",
-									evening_sabha_attendance: "Present",
-									lunch_attendance: "Absent",
-									mobile: "Default",
-									morning_sabha_attendance: "Present",
-									reading_attendance: "Absent",
-								},
-								{
-									date: "2025-07-12T05:30:00.000Z",
-									dinner_attendance: "Present",
-									evening_sabha_attendance: "Present",
-									lunch_attendance: "Present",
-									mobile: "Default",
-									morning_sabha_attendance: "Present",
-									reading_attendance: "Absent",
-								},
-								{
-									date: "2025-07-13T05:30:00.000Z",
-									dinner_attendance: "Leave",
-									evening_sabha_attendance: "Leave",
-									lunch_attendance: "Present",
-									mobile: "Leave",
-									morning_sabha_attendance: "Present",
-									reading_attendance: "Leave",
-								},
-								{
-									date: "2025-07-14T05:30:00.000Z",
-									dinner_attendance: "Present",
-									evening_sabha_attendance: "Present",
-									lunch_attendance: "Present",
-									mobile: "Default",
-									morning_sabha_attendance: "Present",
-									reading_attendance: "Absent",
-								},
-								{
-									date: "2025-07-15T05:30:00.000Z",
-									dinner_attendance: "Present",
-									evening_sabha_attendance: "Present",
-									lunch_attendance: "Absent",
-									mobile: "Default",
-									morning_sabha_attendance: "Present",
-									reading_attendance: "Absent",
-								},
-								{
-									date: "2025-07-16T05:30:00.000Z",
-									dinner_attendance: "Present",
-									evening_sabha_attendance: "Present",
-									lunch_attendance: "Absent",
-									mobile: "Default",
-									morning_sabha_attendance: "Present",
-									reading_attendance: "Absent",
-								},
-								{
-									date: "2025-07-17T05:30:00.000Z",
-									dinner_attendance: "Absent",
-									evening_sabha_attendance: "Present",
-									lunch_attendance: "Absent",
-									mobile: "Default",
-									morning_sabha_attendance: "Present",
-									reading_attendance: "Absent",
-								},
-								{
-									date: "2025-07-18T05:30:00.000Z",
-									dinner_attendance: "Leave",
-									evening_sabha_attendance: "Leave",
-									lunch_attendance: "Absent",
-									mobile: "Leave",
-									morning_sabha_attendance: "Present",
-									reading_attendance: "Leave",
-								},
-								{
-									date: "2025-07-19T05:30:00.000Z",
-									dinner_attendance: "Leave",
-									evening_sabha_attendance: "Leave",
-									lunch_attendance: "Leave",
-									mobile: "Leave",
-									morning_sabha_attendance: "Leave",
-									reading_attendance: "Leave",
-								},
-								{
-									date: "2025-07-20T05:30:00.000Z",
-									dinner_attendance: "Leave",
-									evening_sabha_attendance: "Leave",
-									lunch_attendance: "Leave",
-									mobile: "Leave",
-									morning_sabha_attendance: "Leave",
-									reading_attendance: "Leave",
-								},
-								{
-									date: "2025-07-21T05:30:00.000Z",
-									dinner_attendance: "Absent",
-									evening_sabha_attendance: "Present",
-									lunch_attendance: "Leave",
-									mobile: "Default",
-									morning_sabha_attendance: "Leave",
-									reading_attendance: "Absent",
-								},
-								{
-									date: "2025-07-22T05:30:00.000Z",
-									dinner_attendance: "Present",
-									evening_sabha_attendance: "Present",
-									lunch_attendance: "Leave",
-									mobile: "Default",
-									morning_sabha_attendance: "Present",
-									reading_attendance: "Leave",
-								},
-								{
-									date: "2025-07-23T05:30:00.000Z",
-									dinner_attendance: "Absent",
-									evening_sabha_attendance: "Present",
-									lunch_attendance: "Absent",
-									mobile: "Default",
-									morning_sabha_attendance: "Present",
-									reading_attendance: "Absent",
-								},
-								{
-									date: "2025-07-24T05:30:00.000Z",
-									dinner_attendance: "Present",
-									evening_sabha_attendance: "Present",
-									lunch_attendance: "Present",
-									mobile: "Default",
-									morning_sabha_attendance: "Present",
-									reading_attendance: "Absent",
-								},
-								{
-									date: "2025-07-25T05:30:00.000Z",
-									dinner_attendance: "Absent",
-									evening_sabha_attendance: "Present",
-									lunch_attendance: "Absent",
-									mobile: "Default",
-									morning_sabha_attendance: "Present",
-									reading_attendance: "Absent",
-								},
-								{
-									date: "2025-07-26T05:30:00.000Z",
-									dinner_attendance: "Present",
-									evening_sabha_attendance: "Present",
-									lunch_attendance: "Present",
-									mobile: "Default",
-									morning_sabha_attendance: "Present",
-									reading_attendance: "Absent",
-								},
-								{
-									date: "2025-07-27T05:30:00.000Z",
-									dinner_attendance: "Absent",
-									evening_sabha_attendance: "Present",
-									lunch_attendance: "Absent",
-									mobile: "Default",
-									morning_sabha_attendance: "Absent",
-									reading_attendance: "Present",
-								},
-								{
-									date: "2025-07-28T05:30:00.000Z",
-									dinner_attendance: "Absent",
-									evening_sabha_attendance: "Present",
-									lunch_attendance: "Present",
-									mobile: "Default",
-									morning_sabha_attendance: "Present",
-									reading_attendance: "Absent",
-								},
-								{
-									date: "2025-07-29T05:30:00.000Z",
-									dinner_attendance: "Seva",
-									evening_sabha_attendance: "Seva",
-									lunch_attendance: "Absent",
-									mobile: "Default",
-									morning_sabha_attendance: "Present",
-									reading_attendance: "Absent",
-								},
-								{
-									date: "2025-07-30T05:30:00.000Z",
-									dinner_attendance: "Present",
-									evening_sabha_attendance: "Present",
-									lunch_attendance: "Present",
-									mobile: "Default",
-									morning_sabha_attendance: "Present",
-									reading_attendance: "Absent",
-								},
-								{
-									date: "2025-07-31T05:30:00.000Z",
-									dinner_attendance: "Absent",
-									evening_sabha_attendance: "Absent",
-									lunch_attendance: "Leave",
-									mobile: "Default",
-									morning_sabha_attendance: "Leave",
-									reading_attendance: "Absent",
-								},
-							],
-							statistics: null,
-						},
-						user_id: {
-							_id: "6866d695ba7f9bdc7d1fa014",
-							mobile: "+919726528720",
-							name: "Mayur Nileshbhai Patel",
-							roll: "901",
-							url: "https://avashyakam.sngmyhome.com/api/user/image/20222015",
-						},
-					},
-				],
-			},
-		},
-	};
+	const currentYear = dayjs().year();
+	const [month, setMonth] = useState(dayjs().month() + 1);
 
-	const reports =
-		data.data.viewAttendaceOfUserByIdMonthWise.data[0].user_data_monthwise
-			.daily_report;
-
-	const [month, setMonth] = useState(7);
-	const [year, setYear] = useState(2025);
+	const [year, setYear] = useState(currentYear);
 	const [selectedReport, setSelectedReport] = useState<any | null>(null);
 
 	const daysInMonth = dayjs(`${year}-${month}-01`).daysInMonth();
-	const currentYear = dayjs().year();
+
+	const user = useAuth();
+	const { data, loading, error } = useQuery(GET_ATTENDANCE, {
+		variables: {
+			input: { month, year, userId: user?.currentUser?._id },
+		},
+		skip: !user?.currentUser?._id,
+	});
+
+	if (loading) return <p>loading</p>;
+	if (error) return <p>error</p>;
+
+	const reports =
+		(data as any)?.viewAttendaceOfUserByIdMonthWise?.data?.[0]
+			?.user_data_monthwise?.daily_report ?? [];
 
 	const handleDayClick = (day: number) => {
 		const dateStr = dayjs(`${year}-${month}-${day}`).format("YYYY-MM-DD");
-		const report = reports.find(
-			(r) => dayjs(r.date).format("YYYY-MM-DD") === dateStr
+		const report = reports?.find(
+			(r: { date: string | number | Date | dayjs.Dayjs | null | undefined }) =>
+				dayjs(r.date).format("YYYY-MM-DD") === dateStr
 		);
 		if (report) setSelectedReport(report);
 	};
@@ -427,7 +129,9 @@ const AttendanceCalendar: React.FC = () => {
 								"YYYY-MM-DD"
 							);
 							const report = reports.find(
-								(r) => dayjs(r.date).format("YYYY-MM-DD") === dateStr
+								(r: {
+									date: string | number | dayjs.Dayjs | Date | null | undefined;
+								}) => dayjs(r.date).format("YYYY-MM-DD") === dateStr
 							);
 							return (
 								<button

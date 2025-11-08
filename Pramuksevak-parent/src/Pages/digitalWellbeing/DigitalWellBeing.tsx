@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
 	Smartphone,
 	ArrowLeft,
@@ -24,6 +24,7 @@ import {
 	Pie,
 	Cell,
 } from "recharts";
+import { useNavigate } from "react-router-dom";
 
 const DigitalWellbeingPage = () => {
 	const [activeTab, setActiveTab] = useState<"week" | "apps" | "insights">(
@@ -257,13 +258,13 @@ const DigitalWellbeingPage = () => {
 		(changeFromYesterday / wellbeingData.days[yesterdayIndex].totalScreenTime) *
 		100
 	).toFixed(0);
-
+	const navigate = useNavigate();
 	return (
 		<div className="min-h-screen bg-gray-50">
 			<div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-4 rounded-b-3xl shadow-lg sticky top-0 z-10">
 				<div className="flex items-center justify-between mb-4">
 					<button className="flex items-center gap-1 text-white hover:bg-white/20 rounded-lg p-2 transition">
-						<ArrowLeft className="w-5 h-5" />
+						<ArrowLeft className="w-5 h-5" onClick={() => navigate("/home")} />
 					</button>
 					<h2 className="text-lg font-semibold flex items-center gap-2">
 						<Smartphone className="w-5 h-5" />

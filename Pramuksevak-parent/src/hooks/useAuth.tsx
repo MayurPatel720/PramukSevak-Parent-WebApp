@@ -1,17 +1,30 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useQuery } from "@apollo/client/react";
+import {
+	createContext,
+	useContext,
+	useState,
+	useEffect,
+	type ReactNode,
+} from "react";
 import { useNavigate } from "react-router-dom";
+import { GET_ALL_CHILD } from "../Graphql/user.graphql";
 
 interface User {
-	id: number;
+	_id: string;
 	name: string;
 	balance: number;
-	avatar: string;
+	url: string;
+	role: string;
+	email: string;
+	mobile: string;
+	avatar?: string;
 }
 
 interface AuthContextType {
 	currentUser: User | null;
-	isLoggedIn: boolean;
 	users: User[];
+	isLoggedIn: boolean;
 	login: (username: string, password: string, onSuccess?: () => void) => void;
 	logout: (onSuccess?: () => void) => void;
 	switchUser: (user: User) => void;
@@ -22,53 +35,80 @@ const AuthContext = createContext<AuthContextType | null>(null);
 // eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => {
 	const context = useContext(AuthContext);
-	if (!context) {
-		throw new Error("useAuth must be used within AuthProvider");
-	}
+	if (!context) throw new Error("useAuth must be used within AuthProvider");
 	return context;
 };
 
-interface AuthProviderProps {
-	children: ReactNode;
-}
-
-export const AuthProvider = ({ children }: AuthProviderProps) => {
-	const navigate = useNavigate(); // ✅ Add this line
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+	const navigate = useNavigate();
 	const [currentUser, setCurrentUser] = useState<User | null>(null);
+	const [users, setUsers] = useState<User[]>([]);
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-	const users: User[] = [
-		{ id: 1, name: "Rajesh Kumar", balance: 25430.5, avatar: "RK" },
-		{ id: 2, name: "Priya Sharma", balance: 18920.75, avatar: "PS" },
-		{ id: 3, name: "Amit Patel", balance: 32150.0, avatar: "AP" },
-	];
+	const token = localStorage.getItem("accessToken");
 
-	const login = (
+	const { refetch } = useQuery(GET_ALL_CHILD, {
+		skip: !token,
+		fetchPolicy: "network-only",
+	});
+
+	// ✅ Restore user after refresh
+	useEffect(() => {
+		if (!token) return;
+
+		refetch().then((result) => {
+			const fetchedUsers = (result as any).data?.getAllChild?.data || [];
+			setUsers(fetchedUsers);
+
+			// Try restoring last selected user
+			const savedUser = localStorage.getItem("currentUser");
+			if (savedUser) {
+				setCurrentUser(JSON.parse(savedUser));
+			} else {
+				setCurrentUser(fetchedUsers[0] || null);
+			}
+
+			setIsLoggedIn(true);
+		});
+	}, [refetch, token]);
+
+	const login = async (
 		username: string,
 		password: string,
 		onSuccess?: () => void
 	) => {
-		if (username && password) {
-			setCurrentUser(users[0]);
-			setIsLoggedIn(true);
-			if (onSuccess) onSuccess();
-		}
+		const result = await refetch();
+		const fetchedUsers = (result as any).data?.getAllChild?.data || [];
+
+		if (!fetchedUsers.length) return alert("No users found");
+
+		setUsers(fetchedUsers);
+		setCurrentUser(fetchedUsers[0]);
+		localStorage.setItem("currentUser", JSON.stringify(fetchedUsers[0])); // ✅ Save selected user
+
+		setIsLoggedIn(true);
+		onSuccess?.();
 	};
 
 	const logout = (onSuccess?: () => void) => {
 		setCurrentUser(null);
+		setUsers([]);
 		setIsLoggedIn(false);
-		navigate("/login"); // ✅ Now works properly
-		if (onSuccess) onSuccess();
+		localStorage.removeItem("accessToken");
+		localStorage.removeItem("refreshToken");
+		localStorage.removeItem("currentUser");
+		navigate("/login");
+		onSuccess?.();
 	};
 
 	const switchUser = (user: User) => {
 		setCurrentUser(user);
+		localStorage.setItem("currentUser", JSON.stringify(user));
 	};
 
 	return (
 		<AuthContext.Provider
-			value={{ currentUser, isLoggedIn, users, login, logout, switchUser }}
+			value={{ currentUser, users, isLoggedIn, login, logout, switchUser }}
 		>
 			{children}
 		</AuthContext.Provider>

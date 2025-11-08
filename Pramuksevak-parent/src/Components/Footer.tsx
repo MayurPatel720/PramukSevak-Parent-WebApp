@@ -43,14 +43,18 @@ const Footer = ({ onLogoutSuccess }: FooterProps) => {
 	return (
 		<div
 			ref={footerRef}
-			className="fixed bottom-0 left-0 right-0 bg-white shadow-2xl border-t border-gray-200"
+			className="sticky bottom-0 left-0 right-0 bg-white shadow-2xl border-t border-gray-200"
 		>
 			<div className="max-w-4xl mx-auto p-4">
 				<div className="flex items-center justify-between">
 					{/* User info */}
 					<div className="flex items-center gap-3 flex-1">
-						<div className="w-12 h-12 rounded-full bg-linear-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold">
-							{currentUser?.avatar || "U"}
+						<div>
+							<img
+								className="w-10 h-10 rounded-full object-cover object-center overflow-hidden"
+								src={currentUser?.url}
+								alt=""
+							/>
 						</div>
 						<div className="flex-1">
 							<p className="font-semibold text-gray-800">
@@ -87,15 +91,22 @@ const Footer = ({ onLogoutSuccess }: FooterProps) => {
 				{showUserMenu && users?.length > 1 && (
 					<div className="mt-3 pt-3 border-t border-gray-200 space-y-2">
 						{users
-							.filter((u) => u.id !== currentUser?.id)
+							.filter((u) => u._id !== currentUser?._id)
 							.map((user) => (
 								<div
-									key={user.id}
-									onClick={() => switchUser(user)}
+									key={user._id}
+									onClick={() => {
+										switchUser(user);
+										setShowUserMenu(false);
+									}}
 									className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-xl cursor-pointer transition"
 								>
-									<div className="w-10 h-10 rounded-full bg-linear-to-br from-purple-600 to-pink-600 flex items-center justify-center text-white font-bold text-sm">
-										{user.avatar}
+									<div>
+										<img
+											className="w-12 h-12 rounded-full object-cover object-center overflow-hidden"
+											src={user.url}
+											alt=""
+										/>
 									</div>
 									<div className="flex-1">
 										<p className="font-medium text-gray-800 text-sm">
