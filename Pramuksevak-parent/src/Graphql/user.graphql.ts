@@ -156,12 +156,14 @@ export const GET_TRANSECTIONS = gql`
 				transaction_type
 				updatedAt
 				credited_to {
+				_id
 					name
 					roll
 					url
 					Stallname
 				}
 				debited_from {
+				_id
 					name
 					roll
 					url

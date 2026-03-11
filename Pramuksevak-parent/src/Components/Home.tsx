@@ -23,6 +23,9 @@ const Home = ({ onLogoutSuccess }: any) => {
 	const month = new Date().getMonth() + 1;
 	const user = useAuth();
 
+	console.log("Current User: ", user);
+	
+
 	const { data, loading, error } = useQuery(GET_ATTENDANCE, {
 		variables: {
 			input: { month, year, userId: user?.currentUser?._id },
@@ -156,12 +159,12 @@ const Home = ({ onLogoutSuccess }: any) => {
 						</div>
 
 						{/* Noticeboard */}
-						<div className="bg-white rounded-2xl shadow-lg p-5">
+						{/* <div className="bg-white rounded-2xl shadow-lg p-5">
 							<NoticeBoardOverview
 								notices={(getnotices as any)?.getNoticeboard.data}
 								onSeeMore={() => navigate("/notices")}
 							/>
-						</div>
+						</div> */}
 
 						{/* Transactions */}
 						<div className="bg-white rounded-2xl shadow-lg p-5">

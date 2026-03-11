@@ -3,6 +3,7 @@ import { useAuth } from "../hooks/useAuth";
 import gsap from "gsap";
 import { useMutation } from "@apollo/client/react";
 import { LOGIN } from "../Graphql/user.graphql";
+import logo from "../assets/app_logo.png";	
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Login = ({ onLoginSuccess }: any) => {
@@ -10,6 +11,7 @@ const Login = ({ onLoginSuccess }: any) => {
 	const [password, setPassword] = useState("");
 	const [showPassword, setShowPassword] = useState(false);
 	const { login } = useAuth();
+	const [loadingState, setLoadingState] = useState(false);
 	const loginRef = useRef(null);
 
 	const [parentlogin] = useMutation(LOGIN);
@@ -21,6 +23,7 @@ const Login = ({ onLoginSuccess }: any) => {
 		}
 
 		try {
+			setLoadingState(true)
 			const res = await parentlogin({
 				variables: {
 					input: {
@@ -44,9 +47,11 @@ const Login = ({ onLoginSuccess }: any) => {
 			localStorage.setItem("refreshToken", refreshToken);
 
 			login(username, password, onLoginSuccess);
+			setLoadingState(false)
 		} catch (err) {
 			console.error(err);
 			alert("Something went wrong!");
+			setLoadingState(false)	
 		}
 	};
 
@@ -61,7 +66,12 @@ const Login = ({ onLoginSuccess }: any) => {
 	}, []);
 
 	return (
-		<div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+		<div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-50 via-blue-50 to-purple-50">
+			{loadingState && (
+				<div className="absolute inset-0 bg-blue-500/80 flex items-center justify-center z-20">
+					<div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-16 w-16"></div>
+				</div>
+			)}
 			<div
 				ref={loginRef}
 				className="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-md relative overflow-hidden"
@@ -76,13 +86,13 @@ const Login = ({ onLoginSuccess }: any) => {
 							<div className="relative">
 								<div className="absolute inset-0 bg-blue-500/20 rounded-full blur-xl"></div>
 								<img
-									src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTj-MM_UyJqsvN2GeGKQKLEHNaL-cfeoLa-Q&s"
+									src={logo}
 									alt="Logo"
-									className="relative w-16 h-16 rounded-full border-2 border-blue-500/30 shadow-lg"
+									className="relative flex justify-center items-center w-20 h-20 rounded"
 								/>
 							</div>
 						</div>
-						<h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
+						<h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent mb-2">
 							Pramukh Sevak
 						</h1>
 						<p className="text-gray-600 text-sm">
@@ -94,7 +104,7 @@ const Login = ({ onLoginSuccess }: any) => {
 					<div className="space-y-5">
 						{/* Username Input */}
 						<div>
-							<label className="block text-sm font-semibold text-gray-700 mb-2">
+							<label className="block text-md font-semibold text-gray-700 mb-2">
 								Username
 							</label>
 							<div className="relative">
@@ -125,7 +135,7 @@ const Login = ({ onLoginSuccess }: any) => {
 
 						{/* Password Input */}
 						<div>
-							<label className="block text-sm font-semibold text-gray-700 mb-2">
+							<label className="block text-md font-semibold text-gray-700 mb-2">
 								Password
 							</label>
 							<div className="relative">
@@ -199,7 +209,7 @@ const Login = ({ onLoginSuccess }: any) => {
 						{/* Login Button */}
 						<button
 							onClick={handleLogin}
-							className="w-full bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-600 text-white py-3.5 rounded-xl font-semibold shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 mt-6"
+							className="w-full bg-gradient-to-r from-blue-600 via-blue-400 to-blue-300 text-white py-3.5 rounded-xl font-semibold shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 mt-6"
 						>
 							Login
 						</button>
@@ -210,7 +220,7 @@ const Login = ({ onLoginSuccess }: any) => {
 								href="#"
 								className="text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors"
 							>
-								Forgot Password?
+								Contact APC IT team in case of any inconvenience
 							</a>
 						</div>
 					</div>

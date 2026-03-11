@@ -25,7 +25,7 @@ const AttendanceSummary: React.FC<AttendanceSummaryProps> = ({
 
 			{/* Summary Cards */}
 			<div className="grid grid-cols-3 gap-3 text-center">
-				<div className="bg-linear-to-br from-green-400/90 to-green-500 text-white p-3 rounded-xl shadow-sm">
+				<div className="bg-linear-to-br from-teal-400/90 to-green-500 text-white p-3 rounded-xl shadow-sm">
 					<p className="text-2xl font-bold">{presentDays}</p>
 					<p className="text-xs opacity-90">Present</p>
 				</div>

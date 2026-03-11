@@ -1,5 +1,6 @@
 import { User } from "lucide-react";
 import { useEffect, useRef } from "react";
+import logo from "../assets/app_logo.png";	
 
 const WelcomeAnimation = ({ onComplete }: { onComplete: () => void }) => {
 	const containerRef = useRef<HTMLDivElement | null>(null);
@@ -150,7 +151,14 @@ const WelcomeAnimation = ({ onComplete }: { onComplete: () => void }) => {
 					className="w-32 h-32 mx-auto mb-8 rounded-3xl bg-white shadow-2xl flex items-center justify-center"
 					style={{ opacity: 0, transform: "scale(0)" }}
 				>
-					<User className="w-16 h-16 text-blue-600" />
+					{/* <User className="w-16 h-16 text-blue-600" /> */}
+
+					<img
+						src={logo}
+						alt="Logo"
+						className="w-20 h-20 rounded"
+					/>
+
 				</div>
 
 				<div ref={titleRef} style={{ opacity: 0 }}>

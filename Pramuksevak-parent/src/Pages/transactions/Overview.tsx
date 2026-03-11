@@ -2,6 +2,7 @@
 import React, { useEffect, useRef } from "react";
 import { ArrowUpRight, ArrowDownRight, RefreshCw, Plus } from "lucide-react";
 import gsap from "gsap";
+import { useAuth } from "../../hooks/useAuth";
 
 interface Transaction {
 	_id?: string;
@@ -30,7 +31,10 @@ const TransactionOverview: React.FC<TransactionOverviewProps> = ({
 }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+	console.log("Transaction Overview Data: ", transactions);
 
+	const user = useAuth()
+	
 	useEffect(() => {
 		const ctx = gsap.context(() => {
 			// Animate summary cards
@@ -101,6 +105,9 @@ const TransactionOverview: React.FC<TransactionOverviewProps> = ({
 		if (transaction.transaction_type === "DEBITFROMUSER") return false;
 
 		// ORDER, TRANSFER, FINE: check if user is debited
+		if( transaction.transaction_type === "TRANSFER" && transaction.credited_to._id == user.currentUser._id && transaction.creditedusersamount > 0 ) {
+			return true;
+		}
 
 		return false;
 	};
@@ -124,12 +131,14 @@ const TransactionOverview: React.FC<TransactionOverviewProps> = ({
 	);
 
 	// Get current balance from most recent transaction or prop
-	const balance =
-		currentBalance !== undefined
-			? currentBalance
-			: transactions?.length > 0
-			? getUserBalance(transactions[0])
-			: 0;
+	// const balance =
+	// 	currentBalance !== undefined
+	// 		? currentBalance
+	// 		: transactions?.length > 0
+	// 		? getUserBalance(transactions[0])
+	// 		: 0;
+
+	const balance = user?.currentUser?.balance || 0;
 
 	// Show only last 5 transactions
 	const recentTransactions = (transactions || []).slice(0, 3);
@@ -180,8 +189,8 @@ const TransactionOverview: React.FC<TransactionOverviewProps> = ({
 			</h2>
 
 			{/* Summary Cards */}
-			<div className="grid grid-cols-3 gap-3 mb-5">
-				<div className="summary-card bg-linear-to-br from-green-50 to-green-100 p-3 rounded-xl border border-green-200 shadow-sm">
+			<div className="grid grid-cols-1 gap-3 mb-5">
+				{/* <div className="summary-card bg-linear-to-br from-green-50 to-green-100 p-3 rounded-xl border border-green-200 shadow-sm">
 					<p className="text-xs text-green-700 font-medium mb-1">Credit</p>
 					<p className="text-lg font-bold text-green-800">
 						₹{totalCredit.toFixed(0)}
@@ -193,10 +202,10 @@ const TransactionOverview: React.FC<TransactionOverviewProps> = ({
 					<p className="text-lg font-bold text-red-800">
 						₹{totalDebit.toFixed(0)}
 					</p>
-				</div>
+				</div> */}
 
-				<div className="summary-card bg-linear-to-br from-blue-50 to-blue-100 p-3 rounded-xl border border-blue-200 shadow-sm">
-					<p className="text-xs text-blue-700 font-medium mb-1">Balance</p>
+				<div className="w-full flex justify-between items-center bg-linear-to-br from-blue-50 to-blue-100 p-3 rounded-xl border border-blue-200 shadow-sm">
+					<p className="text-sm font-bold text-blue-700 font-medium mb-1">Balance</p>
 					<p className="text-lg font-bold text-blue-800">
 						₹{balance.toFixed(0)}
 					</p>

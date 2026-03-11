@@ -60,7 +60,7 @@ const AttendanceCalendar: React.FC = () => {
 	return (
 		<>
 			{/* Header */}
-			<div className="flex items-center justify-between bg-blue-600 text-white px-4 py-4 rounded-b-2xl shadow-md sticky top-0 z-10">
+			<div className="flex items-center justify-between bg-blue-400 text-white px-4 py-4 rounded-b-2xl shadow-md sticky top-0 z-10">
 				<button
 					onClick={() => navigate("/home")}
 					className="flex items-center gap-1 text-white hover:text-blue-200 transition"
@@ -159,7 +159,7 @@ const AttendanceCalendar: React.FC = () => {
 							className="bg-white rounded-xl p-6 w-80 shadow-lg"
 						>
 							<h3 className="text-lg font-bold text-blue-700 mb-2">
-								{dayjs(selectedReport.date).format("MMMM D, YYYY")}
+								{dayjs(selectedReport.date).format("MMMM D, YYYY")} : Attendance
 							</h3>
 							<div className="text-sm text-gray-700 space-y-1 max-h-60 overflow-y-auto">
 								{Object.keys(selectedReport)
@@ -167,7 +167,7 @@ const AttendanceCalendar: React.FC = () => {
 									.map((k) => (
 										<p key={k}>
 											<span className="font-semibold capitalize">
-												{k.replaceAll("_", " ")}:
+												{k.split("_")[0]}:
 											</span>{" "}
 											{selectedReport[k]}
 										</p>
