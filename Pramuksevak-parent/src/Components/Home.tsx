@@ -30,6 +30,7 @@ const Home = ({ onLogoutSuccess }: any) => {
 		variables: {
 			input: { month, year, userId: user?.currentUser?._id },
 		},
+		skip: !user?.currentUser?._id, // Skip query if user ID is not available
 	});
 
 	const {
@@ -43,6 +44,7 @@ const Home = ({ onLogoutSuccess }: any) => {
 				limit: 10,
 			},
 		},
+		skip: !user?.currentUser?._id, // Skip query if user ID is not available
 	});
 
 	const {
@@ -57,6 +59,7 @@ const Home = ({ onLogoutSuccess }: any) => {
 				userId: user?.currentUser?._id,
 			},
 		},
+		skip: !user?.currentUser?._id, // Skip query if user ID is not available
 	});
 
 	let totalDays = 0;
